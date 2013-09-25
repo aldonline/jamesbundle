@@ -22,7 +22,7 @@ module.exports =
   get_initial_require: ( js_bundle ) ->
     if ( x = get_jamesbundle_require_entry js_bundle )?
       x = x.split('/')
-      x[x.length - 1] = 'jamesbundle'
+      x[x.length - 1] = 'jamesbundle' # name of the file sans extension
       x.join '/'
     else
       null
