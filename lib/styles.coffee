@@ -22,6 +22,7 @@ class Stylesheet
 
 list_stylesheets = ->
   result = []
+  console.log 'will list stylesheets'
   file.walkSync root,  ( path, dirs, files ) ->
     if path.indexOf('node_modules') is -1
       for f in files when f.split('.').pop() is 'less'
@@ -29,12 +30,15 @@ list_stylesheets = ->
         alias = abspath[root.length..].replace '/', '--'
         s = new Stylesheet abspath, alias
         result.push s
+  console.log 'stylesheets = ', JSON.stringify result
   result
 
 bundle = (cb) ->
   paths = _.pluck list_stylesheets(), 'abspath'
+  console.log 'will compress stylesheets', JSON.stringify paths
   recess paths, {compile:yes, compress:yes}, ( e, r ) ->
     return cb e if e?
+    console.log 'style compilation successful'
     cb null, ( _.pluck r, 'data' ).join '\n'
 
 _cache = null
