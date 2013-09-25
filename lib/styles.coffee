@@ -11,6 +11,8 @@ express = require 'express'
 
 ###
 
+root = process.cwd()
+
 class Stylesheet
   constructor: ( @abspath, @alias ) ->
   mount_path: ->  "/jamesbundle--#{@alias}"
@@ -18,7 +20,7 @@ class Stylesheet
     express_app.get @mount_path(), (req, res) =>
       res.sendfile @abspath
 
-list_stylesheets = (root) ->
+list_stylesheets = ->
   result = []
   file.walkSync root,  ( path, dirs, files ) ->
     if path.indexOf('node_modules') is -1
@@ -48,11 +50,9 @@ css = (url) -> '<link rel="stylesheet" href="' + url + '"/>'
 csss = (urls) -> ( css url for url in urls ).join '\n'
 
 module.exports = ( {production} ) ->
-  
-  root = process.cwd()
 
   mount: ( express_app ) ->
-    s.mount express_app for s in list_stylesheets root
+    s.mount express_app for s in list_stylesheets()
     express_app.get '/jamesbundle.css', (req, res) ->
       bundle (e, r) ->
         res.setHeader 'Content-Type', 'text/css'
@@ -66,7 +66,7 @@ module.exports = ( {production} ) ->
     assets_dir = path.resolve __dirname, '../assets'
     express_app.use "/jamesbundle/assets", express.static assets_dir
 
-  # get_mounted_paths: -> s.mount_path() for s in list_stylesheets root
+  # get_mounted_paths: -> s.mount_path() for s in list_stylesheets()
   html: ->
 
     if production
@@ -76,7 +76,7 @@ module.exports = ( {production} ) ->
     else
       do ->
         styles = do ->
-          ss = for s in list_stylesheets root
+          ss = for s in list_stylesheets()
             '<link rel="stylesheet/less" type="text/css" href="' + s.mount_path() + '" />'
           ss.join '\n'
         """
