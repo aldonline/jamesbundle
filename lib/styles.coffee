@@ -24,7 +24,7 @@ list_stylesheets = (root) ->
     if path.indexOf('node_modules') is -1
       for f in files when f.split('.').pop() is 'less'
         abspath = path + '/' + f
-        alias = abspath.replace '/', '--'
+        alias = abspath[root.length..].replace '/', '--'
         s = new Stylesheet abspath, alias
         result.push s
   result
