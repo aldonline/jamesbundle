@@ -1,6 +1,6 @@
 {
   "name": "jamesbundle",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Bundle less, css, js, coffee with style",
   "author": "Aldo Bucchi <aldo.bucchi@gmail.com>",
   "main": "lib/index",
