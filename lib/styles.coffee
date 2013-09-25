@@ -2,6 +2,7 @@ file   = require 'file'
 path   = require 'path'
 recess = require 'recess'
 _      = require 'underscore'
+fs     = require 'fs'
 express = require 'express'
 
 ###
@@ -26,9 +27,11 @@ list_stylesheets = ->
     if path.indexOf('node_modules') is -1
       for f in files when f.split('.').pop() is 'less'
         abspath = path + '/' + f
-        alias = abspath[root.length..].replace '/', '--'
-        s = new Stylesheet abspath, alias
-        result.push s
+        x = fs.readFileSync abspath
+        if -1 isnt x.toString().indexOf 'jamesbundle' # only marked LESS files hop in
+          alias = abspath[root.length..].replace '/', '--'
+          s = new Stylesheet abspath, alias
+          result.push s
   result
 
 bundle = (cb) ->
