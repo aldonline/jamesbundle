@@ -13,6 +13,8 @@ get_jamesbundle_require_entry = ( js_bundle ) ->
   return null
 
 
+
+
 module.exports =
   ###
   Scan a js bundle for the initial require() entry point
