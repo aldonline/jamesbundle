@@ -33,6 +33,7 @@ list_stylesheets = ->
 
 bundle = (cb) ->
   paths = _.pluck list_stylesheets(), 'abspath'
+  console.log 'will bundle the following less files ', JSON.stringify paths
   recess paths, {compile:yes, compress:yes}, ( e, r ) ->
     return cb e if e?
     cb null, ( _.pluck r, 'data' ).join '\n'
