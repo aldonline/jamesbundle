@@ -8,13 +8,19 @@ util            = require './util'
 # styles          = require './styles'
 
 find_main_script = (root) ->
-  file = null
+  candidates = []
   file_module.walkSync root, (path, dirs, files) ->
     if path.indexOf('node_modules') is -1
       for f in files
         if f.split('.')[0] is 'jamesbundle'
-          file = path_module.resolve path, f
-          break
+          candidates.push path_module.resolve path, f
+  if candidates.length > 1
+    # prefer js over coffeescript
+    for c in candidates when c[-2..] is 'js'
+      file = c
+      break
+  else
+    file = candidates[0]
   file.split('.')[0...-1].join('.')
 
 
